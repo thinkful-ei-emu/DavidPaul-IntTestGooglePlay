@@ -6,10 +6,13 @@ const playstore=require('./playstore.js');
 
 app.get('/apps',(req,res)=>{
   const {sort, genres} =req.query;
+  if(!Object.keys(req.query).every(val => ['sort','genres'].includes(val) )){
+    return res.status(400).send('Remove invalid query parameter')
+  }
   let tempStore=[...playstore];
 
   let validGenres= ['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card','adventure'];
-  if(genres &&!validGenres.includes(genres.toLowerCase())){
+  if(genres && !validGenres.includes(genres.toLowerCase()) ){
     return res.status(400).send('Need a valid genres parameter');
   }
   if(genres){
@@ -33,4 +36,4 @@ app.get('/apps',(req,res)=>{
   res.json(tempStore);
 });
 
-app.listen(8000,()=>console.log('Express app listening to port 8000'));
+module.exports=app;
